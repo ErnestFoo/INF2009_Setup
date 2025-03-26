@@ -14,26 +14,42 @@ _, frame2 = cap.read()
 while True:
     # Calculate the absolute difference between the two frames
     # This function highlights changes between two frames, which is key in detecting movement.
+    # Explain method parameters
+    # cv2.absdiff(frame1, frame2)
     diff = cv2.absdiff(frame1, frame2)
 
     # Convert the difference image to grayscale for better processing
     # Grayscale reduces complexity, making it easier to detect changes in intensity.
+    # Explain method parameters
+    # cv2.cvtColor(image, color conversion code)
     gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
 
     # Apply Gaussian blur to smooth the image and reduce noise
     # Gaussian blur helps to reduce small, irrelevant details that could be falsely detected as movement.
+    # Explain method parameters
+    # cv2.GaussianBlur(image, kernel size, standard deviation)
+
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
 
     # Threshold the image to highlight the areas with significant changes (movement)
     # This function converts the grayscale image to binary, where white pixels represent movement.
+    # Explain method parameters
+    # cv2.threshold(image, threshold value, max value, thresholding method)
     _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)
 
     # Dilate the binary image to fill in gaps in detected movement
     # This function helps to make sure that small movement is also detected by enlarging contours.
+    # Explain method parameters
+    # cv2.dilate(image, kernel, iterations)
+    # Explain the kernel and iterations parameters
+    # The kernel is a matrix used to define the neighborhood for the operation.
+    # Iterations specify how many times the operation is applied to the image.
     dilated = cv2.dilate(thresh, None, iterations=3)
 
     # Find contours of the areas with changes (movement)
     # Contours help to outline the regions where movement occurred, making it possible to highlight the movement.
+    # Explain method parameters
+    # cv2.findContours(image, retrieval mode, approximation method)
     contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     # Loop through the contours and highlight significant movement
